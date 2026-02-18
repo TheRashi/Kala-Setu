@@ -231,8 +231,9 @@ async function fetchCartItems() {
 /**
  * Add item to cart in Supabase
  */
-async function addCartItem(productId) {
+async function addCartItem(productId, quantity = 1) {
     const sessionId = getSessionId();
+    const qtyToAdd = Math.max(1, parseInt(quantity, 10) || 1);
 
     // Check if already in cart
     const { data: existing } = await supabase
@@ -246,7 +247,7 @@ async function addCartItem(productId) {
         // Update quantity
         const { error } = await supabase
             .from('cart_items')
-            .update({ quantity: existing.quantity + 1 })
+            .update({ quantity: existing.quantity + qtyToAdd })
             .eq('id', existing.id);
 
         if (error) console.error('Error updating cart:', error);
@@ -254,7 +255,7 @@ async function addCartItem(productId) {
         // Insert new
         const { error } = await supabase
             .from('cart_items')
-            .insert({ session_id: sessionId, product_id: productId, quantity: 1 });
+            .insert({ session_id: sessionId, product_id: productId, quantity: qtyToAdd });
 
         if (error) console.error('Error adding to cart:', error);
     }

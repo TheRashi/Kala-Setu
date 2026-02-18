@@ -10,6 +10,9 @@ function getProductIdFromURL() {
 
 // Get all products including user-uploaded ones (local fallback)
 function getAllProductsDetail() {
+    if (typeof getAllProducts === 'function') {
+        return getAllProducts();
+    }
     const userProducts = JSON.parse(localStorage.getItem('kalasetu_user_products')) || [];
     return [...(window.products || []), ...userProducts];
 }
@@ -160,17 +163,25 @@ function decreaseQuantity() {
 }
 
 // Add to cart from detail page
-function addToCartFromDetail() {
+async function addToCartFromDetail() {
     const productId = getProductIdFromURL();
     const quantity = parseInt(document.getElementById('quantity').value);
     const allProducts = getAllProductsDetail();
     const product = allProducts.find(p => p.id === productId);
 
-    if (product) {
-        // Get current cart
-        let cart = JSON.parse(localStorage.getItem('kalasetu_cart')) || [];
+    if (window.SupabaseAPI) {
+        try {
+            await window.SupabaseAPI.addCartItem(productId, quantity);
+            if (typeof updateCartCount === 'function') await updateCartCount();
+            showNotification(`✅ ${quantity} item(s) added to cart!`);
+            return;
+        } catch (err) {
+            console.warn('⚠️ Supabase add-to-cart failed, using local fallback:', err);
+        }
+    }
 
-        // Check if item exists in cart
+    if (product) {
+        let cart = JSON.parse(localStorage.getItem('kalasetu_cart')) || [];
         const existingItem = cart.find(item => item.id === productId);
 
         if (existingItem) {
@@ -183,15 +194,28 @@ function addToCartFromDetail() {
         }
 
         localStorage.setItem('kalasetu_cart', JSON.stringify(cart));
-        updateCartCount();
+        if (typeof updateCartCount === 'function') await updateCartCount();
         showNotification(`✅ ${quantity} item(s) added to cart!`);
     }
 }
 
-function addToWishlist() {
+async function addToWishlist() {
     const productId = getProductIdFromURL();
     const allProducts = getAllProductsDetail();
     const product = allProducts.find(p => p.id === productId);
+
+    if (window.SupabaseAPI) {
+        try {
+            const isAdded = await window.SupabaseAPI.toggleWishlistItem(productId);
+            if (typeof updateWishlistUI === 'function') updateWishlistUI();
+            showNotification(isAdded ? `❤️ ${product ? product.name : 'Product'} added to wishlist!` : `💔 Removed from wishlist!`);
+            return;
+        } catch (err) {
+            console.warn('⚠️ Supabase wishlist failed, using local fallback:', err);
+        }
+    }
+
+    if (!product) return;
 
     let wishlist = JSON.parse(localStorage.getItem('kalasetu_wishlist')) || [];
 

@@ -12,6 +12,39 @@ let currentUser = JSON.parse(localStorage.getItem('kalasetu_user')) || null;
 let supabaseProducts = [];
 let useSupabase = false;
 
+function hasSupabaseAPI() {
+    return !!window.SupabaseAPI;
+}
+
+function syncLocalCache() {
+    localStorage.setItem('kalasetu_cart', JSON.stringify(cart));
+    localStorage.setItem('kalasetu_wishlist', JSON.stringify(wishlist));
+}
+
+async function syncSupabaseProducts() {
+    if (!hasSupabaseAPI()) return false;
+    const products = await window.SupabaseAPI.fetchProducts();
+    supabaseProducts = products;
+    useSupabase = products.length > 0;
+    return useSupabase;
+}
+
+async function syncSupabaseCart() {
+    if (!hasSupabaseAPI()) return false;
+    const cartItems = await window.SupabaseAPI.fetchCartItems();
+    cart = cartItems;
+    syncLocalCache();
+    return true;
+}
+
+async function syncSupabaseWishlist() {
+    if (!hasSupabaseAPI()) return false;
+    const wishlistItems = await window.SupabaseAPI.fetchWishlistItems();
+    wishlist = wishlistItems;
+    syncLocalCache();
+    return true;
+}
+
 // Combine default products with user-uploaded products
 function getAllProducts() {
     if (useSupabase && supabaseProducts.length > 0) {
@@ -26,14 +59,15 @@ function getAllProducts() {
 // ============================================
 document.addEventListener('DOMContentLoaded', async function () {
     // Try to load products from Supabase
-    if (window.SupabaseAPI) {
+    if (hasSupabaseAPI()) {
         try {
             console.log('🔄 Loading products from Supabase...');
-            supabaseProducts = await SupabaseAPI.fetchProducts();
-            if (supabaseProducts.length > 0) {
-                useSupabase = true;
-                console.log(`✅ Loaded ${supabaseProducts.length} products from Supabase`);
-            }
+            await Promise.all([
+                syncSupabaseProducts(),
+                syncSupabaseCart(),
+                syncSupabaseWishlist()
+            ]);
+            console.log(`✅ Loaded ${supabaseProducts.length} products from Supabase`);
         } catch (err) {
             console.warn('⚠️ Supabase unavailable, using local data:', err);
         }
@@ -44,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         displayProducts(getAllProducts());
     }
 
-    updateCartCount();
+    await updateCartCount();
     updateUserUI();
     updateWishlistUI();
 
@@ -226,7 +260,7 @@ function performSearch() {
 // ============================================
 // PRODUCT UPLOAD FUNCTIONALITY
 // ============================================
-function handleUploadProduct(event) {
+async function handleUploadProduct(event) {
     event.preventDefault();
 
     // Get form values
@@ -241,7 +275,37 @@ function handleUploadProduct(event) {
     const artisanName = document.getElementById('artisanName').value.trim();
     const artisanLocation = document.getElementById('artisanLocation').value.trim();
 
-    // Create new product object
+    const uploadPayload = {
+        name: name,
+        category: category,
+        region: region,
+        price: price,
+        description: description,
+        image: image,
+        materials: materials,
+        dimensions: dimensions,
+        artisanName: artisanName,
+        artisanLocation: artisanLocation
+    };
+
+    // Prefer Supabase upload
+    if (hasSupabaseAPI()) {
+        try {
+            const createdProduct = await window.SupabaseAPI.uploadProduct(uploadPayload);
+            if (createdProduct) {
+                await syncSupabaseProducts();
+                document.getElementById('uploadProductForm').reset();
+                closeModal('sellModal');
+                showNotification('🎉 Your product has been listed successfully!');
+                displayProducts(getAllProducts());
+                return;
+            }
+        } catch (err) {
+            console.warn('⚠️ Supabase upload failed, using local fallback:', err);
+        }
+    }
+
+    // Create local fallback product object
     const newProduct = {
         id: Date.now(), // Unique ID based on timestamp
         name: name,
@@ -380,13 +444,29 @@ function viewProduct(productId) {
     window.location.href = `product_detail.html?id=${productId}`;
 }
 
-function addToCart(productId) {
+async function addToCart(productId) {
     const allProducts = getAllProducts();
     const product = allProducts.find(p => p.id === productId);
 
+    if (hasSupabaseAPI()) {
+        try {
+            await window.SupabaseAPI.addCartItem(productId, 1);
+            await syncSupabaseCart();
+            await updateCartCount();
+            showNotification('✅ Added to cart!');
+
+            const cartModal = document.getElementById('cartModal');
+            if (cartModal && cartModal.style.display === 'flex') {
+                await displayCartItems();
+            }
+            return;
+        } catch (err) {
+            console.warn('⚠️ Supabase cart add failed, using local fallback:', err);
+        }
+    }
+
     if (product) {
         const existingItem = cart.find(item => item.id === productId);
-
         if (existingItem) {
             existingItem.quantity += 1;
         } else {
@@ -395,22 +475,28 @@ function addToCart(productId) {
                 quantity: 1
             });
         }
+        syncLocalCache();
 
-        localStorage.setItem('kalasetu_cart', JSON.stringify(cart));
-        updateCartCount();
+        await updateCartCount();
         showNotification('✅ Added to cart!');
 
-        // Refresh cart modal if open
         const cartModal = document.getElementById('cartModal');
         if (cartModal && cartModal.style.display === 'flex') {
-            displayCartItems();
+            await displayCartItems();
         }
     }
 }
 
-function updateCartCount() {
+async function updateCartCount() {
     const cartCount = document.getElementById('cartCount');
     if (cartCount) {
+        if (hasSupabaseAPI()) {
+            try {
+                await syncSupabaseCart();
+            } catch (err) {
+                console.warn('⚠️ Cart sync failed:', err);
+            }
+        }
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         cartCount.textContent = totalItems;
     }
@@ -439,15 +525,15 @@ function filterProducts(category) {
 // ============================================
 // MODALS & NOTIFICATIONS
 // ============================================
-function openModal(modalId) {
+async function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.style.display = 'flex';
         if (modalId === 'cartModal') {
-            displayCartItems();
+            await displayCartItems();
         }
         if (modalId === 'wishlistModal') {
-            displayWishlistItems();
+            await displayWishlistItems();
         }
         if (modalId === 'searchModal') {
             setTimeout(() => {
@@ -515,11 +601,19 @@ function showNotification(message) {
 // ============================================
 // CART LOGIC
 // ============================================
-function displayCartItems() {
+async function displayCartItems() {
     const cartItemsContainer = document.getElementById('cartItems');
     const cartTotalElement = document.getElementById('cartTotal');
 
     if (!cartItemsContainer) return;
+
+    if (hasSupabaseAPI()) {
+        try {
+            await syncSupabaseCart();
+        } catch (err) {
+            console.warn('⚠️ Cart refresh failed:', err);
+        }
+    }
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
@@ -566,32 +660,59 @@ function displayCartItems() {
     if (cartTotalElement) cartTotalElement.textContent = `₹${total.toLocaleString()}`;
 }
 
-function updateCartQuantity(productId, change) {
+async function updateCartQuantity(productId, change) {
     const item = cart.find(item => item.id === productId);
     if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-            removeFromCart(productId);
+        const newQuantity = item.quantity + change;
+
+        if (newQuantity <= 0) {
+            await removeFromCart(productId);
         } else {
-            localStorage.setItem('kalasetu_cart', JSON.stringify(cart));
-            displayCartItems();
-            updateCartCount();
+            if (hasSupabaseAPI() && item.cartItemId) {
+                try {
+                    await window.SupabaseAPI.updateCartItemQuantity(item.cartItemId, newQuantity);
+                    await syncSupabaseCart();
+                } catch (err) {
+                    console.warn('⚠️ Supabase cart update failed, using local fallback:', err);
+                    item.quantity = newQuantity;
+                    syncLocalCache();
+                }
+            } else {
+                item.quantity = newQuantity;
+                syncLocalCache();
+            }
+
+            await displayCartItems();
+            await updateCartCount();
         }
     }
 }
 
-function removeFromCart(productId) {
+async function removeFromCart(productId) {
     const index = cart.findIndex(item => item.id === productId);
     if (index !== -1) {
-        cart.splice(index, 1);
-        localStorage.setItem('kalasetu_cart', JSON.stringify(cart));
-        displayCartItems();
-        updateCartCount();
+        const item = cart[index];
+        if (hasSupabaseAPI() && item.cartItemId) {
+            try {
+                await window.SupabaseAPI.removeCartItem(item.cartItemId);
+                await syncSupabaseCart();
+            } catch (err) {
+                console.warn('⚠️ Supabase cart remove failed, using local fallback:', err);
+                cart.splice(index, 1);
+                syncLocalCache();
+            }
+        } else {
+            cart.splice(index, 1);
+            syncLocalCache();
+        }
+
+        await displayCartItems();
+        await updateCartCount();
         showNotification('🗑️ Item removed from cart');
     }
 }
 
-function checkout() {
+async function checkout() {
     if (cart.length === 0) {
         showNotification('❌ Your cart is empty!');
         return;
@@ -605,9 +726,20 @@ function checkout() {
 
     if (confirmed) {
         showNotification('🎉 Order placed successfully! Thank you for supporting Indian artisans!');
-        cart = [];
-        localStorage.removeItem('kalasetu_cart');
-        updateCartCount();
+        if (hasSupabaseAPI()) {
+            try {
+                await window.SupabaseAPI.clearCart();
+                await syncSupabaseCart();
+            } catch (err) {
+                console.warn('⚠️ Supabase clear cart failed, using local fallback:', err);
+                cart = [];
+                localStorage.removeItem('kalasetu_cart');
+            }
+        } else {
+            cart = [];
+            localStorage.removeItem('kalasetu_cart');
+        }
+        await updateCartCount();
         closeModal('cartModal');
     }
 }
@@ -620,31 +752,48 @@ function isInWishlist(productId) {
     return wishlist.some(item => item.id === productId);
 }
 
-function addToWishlist(productId) {
+async function addToWishlist(productId) {
     const allProducts = getAllProducts();
     const product = allProducts.find(p => p.id === productId);
 
-    if (!product) return;
-
-    const index = wishlist.findIndex(item => item.id === productId);
-
-    if (index === -1) {
-        // Add to wishlist
-        wishlist.push(product);
-        showNotification('❤️ Added to wishlist');
+    if (hasSupabaseAPI()) {
+        try {
+            const isAdded = await window.SupabaseAPI.toggleWishlistItem(productId);
+            await syncSupabaseWishlist();
+            showNotification(isAdded ? '❤️ Added to wishlist' : '💔 Removed from wishlist');
+        } catch (err) {
+            console.warn('⚠️ Supabase wishlist toggle failed, using local fallback:', err);
+            if (!product) return;
+            const index = wishlist.findIndex(item => item.id === productId);
+            if (index === -1) {
+                wishlist.push(product);
+                showNotification('❤️ Added to wishlist');
+            } else {
+                wishlist.splice(index, 1);
+                showNotification('💔 Removed from wishlist');
+            }
+            syncLocalCache();
+        }
     } else {
-        // Remove from wishlist
-        wishlist.splice(index, 1);
-        showNotification('💔 Removed from wishlist');
+        if (!product) return;
+        const index = wishlist.findIndex(item => item.id === productId);
+        if (index === -1) {
+            wishlist.push(product);
+            showNotification('❤️ Added to wishlist');
+        } else {
+            wishlist.splice(index, 1);
+            showNotification('💔 Removed from wishlist');
+        }
+        syncLocalCache();
     }
 
-    localStorage.setItem('kalasetu_wishlist', JSON.stringify(wishlist));
     updateWishlistUI();
 
     // Refresh UI
     displayProducts(getAllProducts()); // To update heart icons on cards
-    if (document.getElementById('wishlistModal').style.display === 'flex') {
-        displayWishlistItems();
+    const wishlistModal = document.getElementById('wishlistModal');
+    if (wishlistModal && wishlistModal.style.display === 'flex') {
+        await displayWishlistItems();
     }
 }
 
@@ -660,9 +809,17 @@ function updateWishlistUI() {
     }
 }
 
-function displayWishlistItems() {
+async function displayWishlistItems() {
     const wishlistItemsContainer = document.getElementById('wishlistItems');
     if (!wishlistItemsContainer) return;
+
+    if (hasSupabaseAPI()) {
+        try {
+            await syncSupabaseWishlist();
+        } catch (err) {
+            console.warn('⚠️ Wishlist refresh failed:', err);
+        }
+    }
 
     wishlistItemsContainer.innerHTML = '';
 
@@ -701,41 +858,72 @@ function displayWishlistItems() {
     });
 }
 
-function removeFromWishlist(productId) {
+async function removeFromWishlist(productId) {
     const index = wishlist.findIndex(item => item.id === productId);
     if (index !== -1) {
-        wishlist.splice(index, 1);
-        localStorage.setItem('kalasetu_wishlist', JSON.stringify(wishlist));
+        if (hasSupabaseAPI()) {
+            try {
+                await window.SupabaseAPI.removeWishlistItem(productId);
+                await syncSupabaseWishlist();
+            } catch (err) {
+                console.warn('⚠️ Supabase wishlist remove failed, using local fallback:', err);
+                wishlist.splice(index, 1);
+                syncLocalCache();
+            }
+        } else {
+            wishlist.splice(index, 1);
+            syncLocalCache();
+        }
+
         updateWishlistUI();
-        displayWishlistItems();
+        await displayWishlistItems();
         displayProducts(getAllProducts()); // Update hearts on grid
     }
 }
 
-function addAllWishlistToCart() {
+async function addAllWishlistToCart() {
     if (wishlist.length === 0) {
         showNotification('Your wishlist is empty!');
         return;
     }
 
-    wishlist.forEach(item => {
-        // Check if already in cart
-        const inCart = cart.find(c => c.id === item.id);
-        if (!inCart) {
-            cart.push({ ...item, quantity: 1 });
-        } else {
-            inCart.quantity += 1;
+    if (hasSupabaseAPI()) {
+        try {
+            for (const item of wishlist) {
+                await window.SupabaseAPI.addCartItem(item.id, 1);
+            }
+            await syncSupabaseCart();
+        } catch (err) {
+            console.warn('⚠️ Supabase bulk add failed, using local fallback:', err);
+            wishlist.forEach(item => {
+                const inCart = cart.find(c => c.id === item.id);
+                if (!inCart) {
+                    cart.push({ ...item, quantity: 1 });
+                } else {
+                    inCart.quantity += 1;
+                }
+            });
+            syncLocalCache();
         }
-    });
+    } else {
+        wishlist.forEach(item => {
+            const inCart = cart.find(c => c.id === item.id);
+            if (!inCart) {
+                cart.push({ ...item, quantity: 1 });
+            } else {
+                inCart.quantity += 1;
+            }
+        });
+        syncLocalCache();
+    }
 
-    localStorage.setItem('kalasetu_cart', JSON.stringify(cart));
-    updateCartCount();
+    await updateCartCount();
     showNotification(`✅ Added ${wishlist.length} item(s) to cart!`);
 
     // Optional: Clear wishlist after moving? The user request didn't specify, but usually you keep them or ask. 
     // I'll keep them in wishlist for now as "saved items".
     closeModal('wishlistModal');
-    openModal('cartModal');
+    await openModal('cartModal');
 }
 
 // Initialize on load
