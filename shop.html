@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - KalaSetu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🪔 KalaSetu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html" class="active">Shop</a></li>
+                <li><a href="sell.html">Sell</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span onclick="toggleSearch()">🔍</span>
+                <span onclick="openModal('loginModal')">👤</span>
+                <span onclick="openModal('cartModal')">🛒<span class="cart-badge" id="cartCount">0</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="search-container" id="searchContainer">
+        <div class="container">
+            <input type="text" id="searchInput" placeholder="Search for artworks, categories, regions..." onkeyup="searchProducts()">
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Discover Authentic Indian Art</h1>
+        <p>Browse our curated collection of handcrafted masterpieces</p>
+    </section>
+
+    <!-- Filter & Sort Section -->
+    <section class="container">
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>Category:</label>
+                <select id="categoryFilter" onchange="applyFilters()">
+                    <option value="all">All Categories</option>
+                    <option value="pottery">Pottery</option>
+                    <option value="paintings">Paintings</option>
+                    <option value="textiles">Textiles</option>
+                    <option value="jewelry">Jewelry</option>
+                    <option value="handicrafts">Handicrafts</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Sort By:</label>
+                <select id="sortFilter" onchange="applyFilters()">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name">Name: A to Z</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Price Range:</label>
+                <select id="priceFilter" onchange="applyFilters()">
+                    <option value="all">All Prices</option>
+                    <option value="0-1000">Under ₹1,000</option>
+                    <option value="1000-2000">₹1,000 - ₹2,000</option>
+                    <option value="2000-4000">₹2,000 - ₹4,000</option>
+                    <option value="4000-10000">Above ₹4,000</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Quick Filter -->
+    <section class="container">
+        <div class="quick-filter">
+            <button class="filter-btn active" onclick="quickFilter('all')">All</button>
+            <button class="filter-btn" onclick="quickFilter('pottery')">🏺 Pottery</button>
+            <button class="filter-btn" onclick="quickFilter('paintings')">🎨 Paintings</button>
+            <button class="filter-btn" onclick="quickFilter('textiles')">🧵 Textiles</button>
+            <button class="filter-btn" onclick="quickFilter('jewelry')">💍 Jewelry</button>
+            <button class="filter-btn" onclick="quickFilter('handicrafts')">🎭 Handicrafts</button>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="container">
+        <div class="products-count">
+            <span id="productCount">12 Products</span>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>KalaSetu</h3>
+                <p>Celebrating India's artistic heritage, one creation at a time.</p>
+                <div class="social-icons">
+                    <span>📷</span>
+                    <span>👍</span>
+                    <span>🐦</span>
+                    <span>▶️</span>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="sell.html">Sell</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="shop.html">Pottery</a></li>
+                    <li><a href="shop.html">Paintings</a></li>
+                    <li><a href="shop.html">Textiles</a></li>
+                    <li><a href="shop.html">Jewelry</a></li>
+                    <li><a href="shop.html">Handicrafts</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📧 info@kalasetu.com</p>
+                <p>📞 +91 6393151972</p>
+                <p>📍 GHS, Dehmi Kalan, Jaipur, Rajasthan 303007</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 KalaSetu. All rights reserved. Preserving India's artistic legacy.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login / Signup</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label>I am a:</label>
+                    <select>
+                        <option>Buyer</option>
+                        <option>Seller</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div id="cartItems">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div class="cart-total" id="cartTotal">Total: ₹0</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

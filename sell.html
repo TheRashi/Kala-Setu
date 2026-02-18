@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Art - KalaSetu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🪔 KalaSetu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="sell.html" class="active">Sell</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span onclick="alert('Search feature coming soon!')">🔍</span>
+                <span onclick="openModal('loginModal')">👤</span>
+                <span onclick="openModal('cartModal')">🛒<span class="cart-badge" id="cartCount">0</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Start Selling Your Art</h1>
+        <p>Join thousands of artisans and reach global customers</p>
+    </section>
+
+    <!-- Benefits for Sellers -->
+    <section class="container">
+        <h2 class="section-title">Why Sell on KalaSetu?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <div class="benefit-icon">🌍</div>
+                <h3>Global Reach</h3>
+                <p>Connect with art lovers from around the world and expand your customer base beyond local markets</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">💰</div>
+                <h3>Fair Pricing</h3>
+                <p>Set your own prices and earn fair compensation for your craftsmanship and artistic skill</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">📱</div>
+                <h3>Easy Management</h3>
+                <p>Simple dashboard to manage your products, orders, and track your sales performance</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">🚚</div>
+                <h3>Logistics Support</h3>
+                <p>We help with packaging guidelines and connect you with reliable shipping partners</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">🛡️</div>
+                <h3>Secure Payments</h3>
+                <p>Receive timely payments directly to your bank account with complete security</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">📈</div>
+                <h3>Grow Your Brand</h3>
+                <p>Build your artisan brand and create a loyal customer base with our marketing support</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">📝</div>
+                    <h3>Register</h3>
+                    <p>Create your seller account with basic details about you and your craft</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">📸</div>
+                    <h3>Upload Products</h3>
+                    <p>Add high-quality photos and detailed descriptions of your artworks</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">🛍️</div>
+                    <h3>Receive Orders</h3>
+                    <p>Get notified when customers purchase your products</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">📦</div>
+                    <h3>Ship & Earn</h3>
+                    <p>Pack and ship your art, then receive payment directly to your account</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Product Form -->
+    <section class="container">
+        <div class="upload-section">
+            <h2 class="section-title">Upload Your Artwork</h2>
+            <div class="upload-form-container">
+                <form id="uploadForm" onsubmit="handleUpload(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Product Name *</label>
+                            <input type="text" name="productName" required placeholder="e.g., Madhubani Painting">
+                        </div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="pottery">Pottery</option>
+                                <option value="paintings">Paintings</option>
+                                <option value="textiles">Textiles</option>
+                                <option value="jewelry">Jewelry</option>
+                                <option value="handicrafts">Handicrafts</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea name="description" rows="4" required placeholder="Describe your artwork - materials used, techniques, cultural significance, dimensions, etc."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Region / State *</label>
+                            <input type="text" name="region" required placeholder="e.g., Rajasthan">
+                        </div>
+                        <div class="form-group">
+                            <label>Price (₹) *</label>
+                            <input type="number" name="price" required placeholder="Enter price" min="1">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Dimensions</label>
+                            <input type="text" name="dimensions" placeholder="e.g., 30cm x 40cm">
+                        </div>
+                        <div class="form-group">
+                            <label>Materials Used</label>
+                            <input type="text" name="materials" placeholder="e.g., Natural dyes, Cotton canvas">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Images * (Up to 5 images)</label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFileSelect(event)">
+                            <div class="upload-placeholder">
+                                <span class="upload-icon">📷</span>
+                                <p>Click to upload or drag and drop</p>
+                                <p class="upload-hint">PNG, JPG up to 5MB each</p>
+                            </div>
+                            <div id="imagePreview" class="image-preview"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" required>
+                            I certify that this is my original artwork and I have the right to sell it
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" required>
+                            I agree to KalaSetu's <a href="#" style="color: var(--primary);">Terms & Conditions</a> and <a href="#" style="color: var(--primary);">Seller Policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">
+                        Upload Product
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seller Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Artisans Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"KalaSetu helped me reach customers across India and abroad. My pottery business has grown 5x in just 6 months!"</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨‍🎨</div>
+                        <div>
+                            <div class="author-name">Ramesh Kumar</div>
+                            <div class="author-craft">Potter, West Bengal</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"Finally, a platform that values traditional art. The support team is wonderful and payments are always on time."</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👩‍🎨</div>
+                        <div>
+                            <div class="author-name">Lakshmi Devi</div>
+                            <div class="author-craft">Madhubani Artist, Bihar</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"I love how easy it is to manage my products. KalaSetu has made selling my handicrafts so simple!"</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨‍🎨</div>
+                        <div>
+                            <div class="author-name">Arjun Patel</div>
+                            <div class="author-craft">Handicraft Artisan, Gujarat</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Share Your Art with the World?</h2>
+            <p>Join KalaSetu today and start your journey to success</p>
+            <button class="btn btn-primary" onclick="document.getElementById('uploadForm').scrollIntoView({behavior: 'smooth'})">
+                Start Selling Now
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>KalaSetu</h3>
+                <p>Celebrating India's artistic heritage, one creation at a time.</p>
+                <div class="social-icons">
+                    <span>📷</span>
+                    <span>👍</span>
+                    <span>🐦</span>
+                    <span>▶️</span>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="sell.html">Sell</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="shop.html">Pottery</a></li>
+                    <li><a href="shop.html">Paintings</a></li>
+                    <li><a href="shop.html">Textiles</a></li>
+                    <li><a href="shop.html">Jewelry</a></li>
+                    <li><a href="shop.html">Handicrafts</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📧 info@kalasetu.com</p>
+                <p>📞 +91 6393151972</p>
+                <p>📍 GHS, Dehmi Kalan, Jaipur, Rajasthan 303007</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 KalaSetu. All rights reserved. Preserving India's artistic legacy.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login / Signup</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label>I am a:</label>
+                    <select>
+                        <option>Buyer</option>
+                        <option>Seller</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: ₹0</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

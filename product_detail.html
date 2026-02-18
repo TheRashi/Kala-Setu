@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Product Details - KalaSetu</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🪔 KalaSetu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#shop">Shop</a></li>
+                <li><a href="index.html" onclick="openModal('sellModal'); return false;">Sell</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span onclick="openModal('searchModal')" title="Search Products">🔍</span>
+                <span onclick="openModal('loginModal')" title="Login / Account">👤</span>
+                <span onclick="openModal('cartModal')" title="Shopping Cart">🛒<span class="cart-badge"
+                        id="cartCount">0</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb"
+        style="padding: 1rem 5%; background: var(--bg-body); color: var(--text-light); font-size: 0.9rem;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <a href="index.html" style="color: var(--primary);">Home</a> /
+            <a href="index.html#shop" style="color: var(--primary);">Shop</a> /
+            <span id="breadcrumbCategory">Category</span> /
+            <span id="breadcrumbProduct" style="color: var(--text-main); font-weight: 500;">Product</span>
+        </div>
+    </div>
+
+    <!-- Product Detail Section -->
+    <section class="container product-detail-section">
+        <div class="product-detail-grid">
+            <!-- Product Images -->
+            <div class="product-images">
+                <div class="main-image">
+                    <img id="mainImage" src="" alt="Product Image"
+                        onerror="this.src='https://via.placeholder.com/500x500?text=Image+Not+Found'">
+                </div>
+                <div class="thumbnail-images" id="thumbnailImages">
+                    <!-- Thumbnails will be loaded by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info-detail">
+                <h1 id="productName">Product Name</h1>
+                <div class="product-meta">
+                    <span id="productRegion">📍 Region</span>
+                    <span id="productCategory" style="text-transform: capitalize;">Category</span>
+                </div>
+
+                <div class="product-rating" style="margin-bottom: 1rem; color: #f39c12;">
+                    <span class="stars" id="productRating">⭐⭐⭐⭐⭐</span>
+                    <span class="rating-count" id="reviewCount"
+                        style="color: var(--text-light); font-size: 0.9rem;">(127 reviews)</span>
+                </div>
+
+                <div class="product-price-detail">
+                    <span class="current-price" id="productPrice">₹0</span>
+                    <span class="original-price" id="originalPrice">₹0</span>
+                    <span class="discount-badge" id="discountBadge">20% OFF</span>
+                </div>
+
+                <div class="product-description" style="margin-bottom: 2rem; color: var(--text-main);">
+                    <h3>About This Product</h3>
+                    <p id="productDescription" style="margin-top: 0.5rem; line-height: 1.8;">Product description will be
+                        loaded here...</p>
+                </div>
+
+                <div class="quantity-selector" style="margin-bottom: 1.5rem;">
+                    <label style="font-weight: 500; margin-right: 1rem;">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10" readonly>
+                        <button onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <div class="product-actions-detail">
+                    <button class="btn btn-primary btn-large" onclick="addToCartFromDetail()" style="flex: 1;">
+                        🛒 Add to Cart
+                    </button>
+                    <button class="btn btn-wishlist" onclick="addToWishlist()" title="Add to Wishlist">
+                        ❤️
+                    </button>
+                </div>
+
+                <!-- Product Specs -->
+                <div class="product-specs">
+                    <h3 style="margin-bottom: 1rem;">Product Specifications</h3>
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <span class="spec-label">Materials</span>
+                            <span class="spec-value" id="specMaterials">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Dimensions</span>
+                            <span class="spec-value" id="specDimensions">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Art Form</span>
+                            <span class="spec-value" id="specArtForm">-</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Delivery</span>
+                            <span class="spec-value" id="specDelivery">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Artisan Section -->
+    <section class="artisan-section" style="background: white; padding: 4rem 5%; margin: 2rem 0;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <h2 class="section-title">Meet the Artisan</h2>
+            <div style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <div style="font-size: 5rem;" id="artisanAvatar">👨‍🎨</div>
+                <div style="max-width: 600px;">
+                    <h3 id="artisanName" style="margin-bottom: 0.5rem; font-size: 1.5rem;">Artisan Name</h3>
+                    <p id="artisanLocation" style="color: var(--text-light); margin-bottom: 1rem;">📍 Location</p>
+                    <p id="artisanBio" style="line-height: 1.8; color: var(--text-main);">
+                        This artisan specializes in traditional crafts passed down through generations...
+                    </p>
+                    <div style="display: flex; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                        <div>
+                            <span style="font-size: 1.5rem; font-weight: 700; color: var(--primary);"
+                                id="artisanProducts">0</span>
+                            <span style="color: var(--text-light);"> Products</span>
+                        </div>
+                        <div>
+                            <span style="font-size: 1.5rem; font-weight: 700; color: var(--primary);"
+                                id="artisanSales">0</span>
+                            <span style="color: var(--text-light);"> Sales</span>
+                        </div>
+                        <div>
+                            <span style="font-size: 1.5rem; font-weight: 700; color: var(--primary);"
+                                id="artisanRating">5.0</span>
+                            <span style="color: var(--text-light);"> Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>KalaSetu</h3>
+                <p>Celebrating India's artistic heritage, one creation at a time.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#shop">Shop</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📧 info@kalasetu.com</p>
+                <p>📞 +91 6393151972</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 KalaSetu. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="closeModal('searchModal')">&times;</span>
+            <h2>🔍 Search Products</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for paintings, pottery, textiles..."
+                    onkeyup="handleSearchDetail(event)">
+                <button class="btn btn-primary" onclick="performSearchDetail()"
+                    style="margin-top: 1rem; width: 100%;">Search</button>
+            </div>
+            <div id="searchResults" class="search-results"
+                style="margin-top: 1.5rem; max-height: 400px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content" style="max-width: 550px;">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2>🛒 Shopping Cart</h2>
+            <div id="cartItems" style="max-height: 400px; overflow-y: auto;"></div>
+            <div class="cart-summary"
+                style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span style="font-size: 1.2rem;">Subtotal:</span>
+                    <span id="cartTotal" style="font-size: 1.4rem; font-weight: 700; color: var(--primary);">₹0</span>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>👤 Login to KalaSetu</h2>
+            <form onsubmit="handleLoginDetail(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+    <script src="product-detail.js"></script>
+</body>
+
+</html>

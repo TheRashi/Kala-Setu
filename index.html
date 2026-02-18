@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KalaSetu - Indian Art Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                <i class="ph-fill ph-fire-simple" style="color: var(--primary); font-size: 1.4rem;"></i> KalaSetu
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#shop">Shop</a></li>
+                <li><a href="#" onclick="openModal('sellModal'); return false;">Sell</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span onclick="openModal('searchModal')" title="Search Products"><i
+                        class="ph ph-magnifying-glass"></i></span>
+                <span onclick="openModal('wishlistModal')" title="My Wishlist" style="position: relative;">
+                    <i class="ph ph-heart"></i>
+                    <span class="cart-badge wishlist-badge" id="wishlistCount">0</span>
+                </span>
+                <span onclick="openModal('loginModal')" title="Login / Account"><i class="ph ph-user"></i></span>
+                <span onclick="openModal('cartModal')" title="Shopping Cart" style="position: relative;">
+                    <i class="ph ph-shopping-cart"></i>
+                    <span class="cart-badge" id="cartCount">0</span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Video Background -->
+        <div class="video-background">
+            <video autoplay muted loop playsinline
+                poster="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?q=80&w=2449&auto=format&fit=crop">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-pottery-maker-hands-1216-large.mp4"
+                    type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+
+        <div class="hero-content fade-in">
+            <h1>Discover India's Artistry</h1>
+            <p>From Village Hands to Global Hearts. Shop authentic handmade treasures.</p>
+            <div class="cta-buttons">
+                <a href="#shop" class="btn btn-primary">Shop Now</a>
+                <a href="#" onclick="openModal('sellModal'); return false;" class="btn btn-secondary">Start Selling</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="container" id="shop">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="categories-grid">
+            <div class="category-card" onclick="filterProducts('pottery')">
+                <div class="category-icon"><i class="ph ph-vase"></i></div>
+                <h3>Pottery</h3>
+                <p>Traditional earthenware</p>
+            </div>
+            <div class="category-card" onclick="filterProducts('paintings')">
+                <div class="category-icon"><i class="ph ph-paint-brush"></i></div>
+                <h3>Paintings</h3>
+                <p>Madhubani, Warli & more</p>
+            </div>
+            <div class="category-card" onclick="filterProducts('textiles')">
+                <div class="category-icon"><i class="ph ph-scroll"></i></div>
+                <h3>Textiles</h3>
+                <p>Handwoven fabrics</p>
+            </div>
+            <div class="category-card" onclick="filterProducts('jewelry')">
+                <div class="category-icon"><i class="ph ph-diamond"></i></div>
+                <h3>Jewelry</h3>
+                <p>Traditional ornaments</p>
+            </div>
+            <div class="category-card" onclick="filterProducts('handicrafts')">
+                <div class="category-icon"><i class="ph ph-mask-happy"></i></div>
+                <h3>Handicrafts</h3>
+                <p>Unique handmade items</p>
+            </div>
+            <div class="category-card" onclick="filterProducts('all')">
+                <div class="category-icon"><i class="ph ph-squares-four"></i></div>
+                <h3>View All</h3>
+                <p>Explore everything</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="container">
+        <h2 class="section-title">Featured Artworks</h2>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded dynamically from data.js -->
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="container" id="about"
+        style="background-color: var(--bg-card); border-radius: 20px; margin-top: 4rem; margin-bottom: 4rem;">
+        <h2 class="section-title">Why Choose KalaSetu</h2>
+        <div class="categories-grid"
+            style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); box-shadow: none; gap: 4rem;">
+            <div style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; color: var(--primary);"><i
+                        class="ph ph-hand-heart"></i></div>
+                <h3 style="margin-bottom: 0.5rem;">Support Artisans</h3>
+                <p style="color: var(--text-light);">Direct support to rural creators</p>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; color: var(--primary);"><i
+                        class="ph ph-shield-check"></i></div>
+                <h3 style="margin-bottom: 0.5rem;">Secure Payments</h3>
+                <p style="color: var(--text-light);">Safe and encrypted transactions</p>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; color: var(--primary);"><i
+                        class="ph ph-globe-hemisphere-west"></i></div>
+                <h3 style="margin-bottom: 0.5rem;">Global Reach</h3>
+                <p style="color: var(--text-light);">Connecting India to the world</p>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; color: var(--primary);"><i
+                        class="ph ph-seal-check"></i></div>
+                <h3 style="margin-bottom: 0.5rem;">Authentic Craft</h3>
+                <p style="color: var(--text-light);">100% genuine handmade items</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>KalaSetu</h3>
+                <p>Celebrating India's artistic heritage, one creation at a time. We bridge the gap between traditional
+                    artisans and modern homes.</p>
+                <div class="nav-icons" style="margin-top: 1rem; color: rgba(255,255,255,0.8);">
+                    <span><i class="ph ph-instagram-logo"></i></span>
+                    <span><i class="ph ph-facebook-logo"></i></span>
+                    <span><i class="ph ph-twitter-logo"></i></span>
+                    <span><i class="ph ph-youtube-logo"></i></span>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#shop">Shop</a>
+                    <a href="#" onclick="openModal('sellModal'); return false;">Sell</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <div class="footer-links">
+                    <a href="#" onclick="filterProducts('pottery'); return false;">Pottery</a>
+                    <a href="#" onclick="filterProducts('paintings'); return false;">Paintings</a>
+                    <a href="#" onclick="filterProducts('textiles'); return false;">Textiles</a>
+                    <a href="#" onclick="filterProducts('jewelry'); return false;">Jewelry</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="ph ph-envelope-simple"></i> info@kalasetu.com</p>
+                <p><i class="ph ph-phone"></i> +91 6393151972</p>
+                <p><i class="ph ph-map-pin"></i> GHS, Dehmi Kalan, Jaipur, 303007</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 KalaSetu. All rights reserved. Preserving India's artistic legacy.</p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         MODALS
+         ============================================ -->
+
+    <!-- SEARCH MODAL -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="closeModal('searchModal')">&times;</span>
+            <h2><i class="ph ph-magnifying-glass"></i> Search Products</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for paintings, pottery, textiles..."
+                    onkeyup="handleSearch(event)" autofocus>
+                <button class="btn btn-primary" onclick="performSearch()" style="margin-top: 1rem; width: 100%;">
+                    Search
+                </button>
+            </div>
+            <div id="searchResults" class="search-results"
+                style="margin-top: 1.5rem; max-height: 400px; overflow-y: auto;">
+                <!-- Search results will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <div id="authContainer">
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <h2><i class="ph ph-user"></i> Login to KalaSetu</h2>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="loginEmail" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" required placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--text-light);">
+                        Don't have an account?
+                        <a href="#" onclick="showSignupForm()" style="color: var(--primary); font-weight: 600;">Sign
+                            Up</a>
+                    </p>
+                </div>
+
+                <!-- Signup Form (Hidden by default) -->
+                <div id="signupForm" style="display: none;">
+                    <h2><i class="ph ph-sparkle"></i> Create Account</h2>
+                    <form onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="signupName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="signupEmail" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="signupPhone" required placeholder="Enter your phone number">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="signupPassword" required placeholder="Create a password"
+                                minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>I am a:</label>
+                            <select id="signupRole" required>
+                                <option value="buyer">Buyer - Looking to purchase art</option>
+                                <option value="artisan">Artisan - Want to sell my creations</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--text-light);">
+                        Already have an account?
+                        <a href="#" onclick="showLoginForm()" style="color: var(--primary); font-weight: 600;">Login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELL / UPLOAD PRODUCT MODAL -->
+    <div id="sellModal" class="modal">
+        <div class="modal-content" style="max-width: 650px; max-height: 90vh; overflow-y: auto;">
+            <span class="close-modal" onclick="closeModal('sellModal')">&times;</span>
+            <h2><i class="ph ph-paint-brush"></i> List Your Artwork</h2>
+            <p style="color: var(--text-light); margin-bottom: 1.5rem;">Share your handcrafted creations with the world.
+                Fill in the details below to add your product.</p>
+
+            <form id="uploadProductForm" onsubmit="handleUploadProduct(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" id="productName" required placeholder="e.g., Madhubani Painting">
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="paintings">Paintings</option>
+                            <option value="pottery">Pottery</option>
+                            <option value="textiles">Textiles</option>
+                            <option value="jewelry">Jewelry</option>
+                            <option value="handicrafts">Handicrafts</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (₹) *</label>
+                        <input type="number" id="productPrice" required placeholder="e.g., 2500" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Region/Origin *</label>
+                        <input type="text" id="productRegion" required placeholder="e.g., Bihar, Rajasthan">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Product Description *</label>
+                    <textarea id="productDescription" required
+                        placeholder="Describe your artwork, its history, materials used, dimensions, etc."
+                        rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Product Image URL *</label>
+                    <input type="url" id="productImage" required placeholder="https://example.com/your-image.jpg">
+                    <small style="color: var(--text-light);">Paste a direct link to your product image (you can use
+                        Imgur, Google Drive, etc.)</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Materials Used</label>
+                        <input type="text" id="productMaterials" placeholder="e.g., Natural dyes, Handmade paper">
+                    </div>
+                    <div class="form-group">
+                        <label>Dimensions</label>
+                        <input type="text" id="productDimensions" placeholder="e.g., 30cm x 40cm">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Name (Artisan) *</label>
+                    <input type="text" id="artisanName" required placeholder="Your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Your Location *</label>
+                    <input type="text" id="artisanLocation" required placeholder="City, State">
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="termsAgree" required>
+                        <span>I agree to the <a href="#" style="color: var(--primary);">Terms of Service</a> and confirm
+                            this is an authentic handmade product.</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="ph ph-rocket-launch"></i> List My Product
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CART MODAL -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content" style="max-width: 550px;">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2><i class="ph ph-shopping-cart"></i> Shopping Cart</h2>
+            <div id="cartItems" style="max-height: 400px; overflow-y: auto;">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div class="cart-summary"
+                style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span style="font-size: 1.2rem;">Subtotal:</span>
+                    <span id="cartTotal" style="font-size: 1.4rem; font-weight: 700; color: var(--primary);">₹0</span>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="checkout()">
+                    Proceed to Checkout
+                </button>
+                <button class="btn btn-secondary"
+                    style="width: 100%; margin-top: 0.5rem; border-color: var(--text-light); color: var(--text-main);"
+                    onclick="closeModal('cartModal')">
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WISHLIST MODAL -->
+    <div id="wishlistModal" class="modal">
+        <div class="modal-content" style="max-width: 550px;">
+            <span class="close-modal" onclick="closeModal('wishlistModal')">&times;</span>
+            <h2><i class="ph ph-heart" style="color: #e74c3c;"></i> My Wishlist</h2>
+            <div id="wishlistItems" style="max-height: 400px; overflow-y: auto;">
+                <!-- Wishlist items will be displayed here -->
+            </div>
+            <div class="wishlist-summary"
+                style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid var(--border-color);">
+                <button class="btn btn-primary" style="width: 100%;" onclick="addAllWishlistToCart()">
+                    <i class="ph ph-shopping-cart"></i> Add All to Cart
+                </button>
+                <button class="btn btn-secondary"
+                    style="width: 100%; margin-top: 0.5rem; border-color: var(--text-light); color: var(--text-main);"
+                    onclick="closeModal('wishlistModal')">
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="data.js"></script>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

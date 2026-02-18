@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - KalaSetu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🪔 KalaSetu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="sell.html">Sell</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span onclick="alert('Search feature coming soon!')">🔍</span>
+                <span onclick="openModal('loginModal')">👤</span>
+                <span onclick="openModal('cartModal')">🛒<span class="cart-badge" id="cartCount">0</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Get In Touch</h1>
+        <p>We'd love to hear from you</p>
+    </section>
+
+    <!-- Contact Information -->
+    <section class="container">
+        <div class="contact-info-grid">
+            <div class="contact-info-card">
+                <div class="contact-icon">📧</div>
+                <h3>Email Us</h3>
+                <p>info@kalasetu.com</p>
+                <p>support@kalasetu.com</p>
+                <p class="contact-note">We respond within 24 hours</p>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-icon">📞</div>
+                <h3>Call Us</h3>
+                <p>+91 6393151972</p>
+                <p>+91 7979036241</p>
+                <p class="contact-note">Mon-Sat, 9 AM - 6 PM IST</p>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-icon">📍</div>
+                <h3>Visit Us</h3>
+                <p>KalaSetu Headquarters</p>
+                <p>GHS, Dehmi kalan</p>
+                <p>Jaipur, Rajasthan 303007</p>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-icon">💬</div>
+                <h3>Social Media</h3>
+                <p>@kalasetu.official</p>
+                <p>Follow us for updates</p>
+                <div class="social-links">
+                    <span>📷</span>
+                    <span>👍</span>
+                    <span>🐦</span>
+                    <span>▶️</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="container">
+        <div class="contact-form-section">
+            <div class="contact-form-intro">
+                <h2 class="section-title" style="text-align: left;">Send Us a Message</h2>
+                <p>Have a question, suggestion, or just want to say hello? Fill out the form below and our team will get back to you as soon as possible.</p>
+                
+                <div class="faq-quick-links">
+                    <h4>Quick Links:</h4>
+                    <ul>
+                        <li><a href="#faq">Frequently Asked Questions</a></li>
+                        <li><a href="sell.html">Become a Seller</a></li>
+                        <li><a href="shop.html">Track Your Order</a></li>
+                        <li><a href="#support">Customer Support</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name *</label>
+                            <input type="text" name="firstName" required placeholder="Enter your first name">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name *</label>
+                            <input type="text" name="lastName" required placeholder="Enter your last name">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" name="email" required placeholder="your.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" placeholder="+91 98765 43210">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject *</label>
+                        <select name="subject" required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="order">Order Related</option>
+                            <option value="seller">Seller Support</option>
+                            <option value="technical">Technical Issue</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="feedback">Feedback & Suggestions</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message *</label>
+                        <textarea name="message" rows="6" required placeholder="Tell us what's on your mind..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="newsletter">
+                            Subscribe to our newsletter for updates on new artisans and products
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-category">
+                    <h3>For Buyers</h3>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How do I place an order?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Browse our shop, add items to your cart, and proceed to checkout. You'll need to create an account or log in to complete your purchase.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>What payment methods do you accept?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            We accept all major credit/debit cards, UPI, net banking, and digital wallets. All transactions are secure and encrypted.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How long does shipping take?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Delivery typically takes 5-7 business days within India. International shipping may take 10-15 business days depending on the destination.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>What is your return policy?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            We offer a 7-day return policy for damaged or defective items. Handmade items may have slight variations which are not considered defects.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-category">
+                    <h3>For Sellers</h3>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How do I become a seller?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Visit our Sell page, fill out the registration form with your details and artwork information. Our team will verify your submission and get back to you within 2-3 business days.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>What commission does KalaSetu charge?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            We charge a competitive commission of 15-20% on each sale, which covers platform maintenance, payment processing, and marketing support.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>When do I receive payment?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Payments are processed within 7 days after the product is delivered to the customer. Funds are transferred directly to your registered bank account.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Do you provide shipping support?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Yes! We provide packaging guidelines and partner with reliable courier services. We can also arrange pickup from your location.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section (Placeholder) -->
+    <section class="map-section">
+        <div class="map-placeholder">
+            <div class="map-icon">🗺️</div>
+            <h3>Visit Our Office</h3>
+            <p>GHS, Dehmi Kalan, Jaipur, Rajasthan 303007</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Map integration coming soon</p>
+        </div>
+    </section>
+
+    <!-- Support Hours -->
+    <section class="container">
+        <div class="support-hours" id="support">
+            <h2 class="section-title">Customer Support Hours</h2>
+            <div class="hours-grid">
+                <div class="hours-card">
+                    <h4>📞 Phone Support</h4>
+                    <p><strong>Monday - Saturday:</strong> 9:00 AM - 6:00 PM IST</p>
+                    <p><strong>Sunday:</strong> Closed</p>
+                </div>
+                <div class="hours-card">
+                    <h4>📧 Email Support</h4>
+                    <p><strong>Response Time:</strong> Within 24 hours</p>
+                    <p><strong>Available:</strong> 24/7</p>
+                </div>
+                <div class="hours-card">
+                    <h4>💬 Live Chat</h4>
+                    <p><strong>Monday - Friday:</strong> 10:00 AM - 5:00 PM IST</p>
+                    <p><strong>Weekend:</strong> Limited availability</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>KalaSetu</h3>
+                <p>Celebrating India's artistic heritage, one creation at a time.</p>
+                <div class="social-icons">
+                    <span>📷</span>
+                    <span>👍</span>
+                    <span>🐦</span>
+                    <span>▶️</span>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="sell.html">Sell</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="shop.html">Pottery</a></li>
+                    <li><a href="shop.html">Paintings</a></li>
+                    <li><a href="shop.html">Textiles</a></li>
+                    <li><a href="shop.html">Jewelry</a></li>
+                    <li><a href="shop.html">Handicrafts</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📧 info@kalasetu.com</p>
+                <p>📞 +91 6393151972</p>
+                <p>📍 GHS, Dehmi Kalan, Jaipur, Rajasthan 303007</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 KalaSetu. All rights reserved. Preserving India's artistic legacy.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login / Signup</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label>I am a:</label>
+                    <select>
+                        <option>Buyer</option>
+                        <option>Seller</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: ₹0</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

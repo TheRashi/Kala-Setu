@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - KalaSetu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">🪔 KalaSetu</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="sell.html">Sell</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <span onclick="alert('Search feature coming soon!')">🔍</span>
+                <span onclick="openModal('loginModal')">👤</span>
+                <span onclick="openModal('cartModal')">🛒<span class="cart-badge" id="cartCount">0</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>About KalaSetu</h1>
+        <p>Bridging Tradition with Tomorrow</p>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 class="section-title" style="text-align: left;">Our Story</h2>
+                <p>KalaSetu was born from a simple yet powerful vision: to create a bridge (Setu) between India's rich artistic heritage (Kala) and the modern world. We witnessed talented artisans struggling to reach wider markets while their centuries-old crafts faced the risk of extinction.</p>
+                <p>Founded in 2024, we set out to change this narrative. Our platform connects traditional Indian artisans directly with art enthusiasts and collectors worldwide, ensuring that every purchase supports the livelihood of skilled craftspeople and helps preserve India's cultural legacy.</p>
+                <p>Today, KalaSetu proudly serves as home to thousands of artisans from across India, from the pottery workshops of West Bengal to the textile looms of Gujarat, from the painting studios of Bihar to the jewelry makers of Rajasthan.</p>
+            </div>
+            <div class="about-image">
+    <img 
+        src="https://i.pinimg.com/1200x/33/08/c7/3308c72997f362dc8bfb4835da1ef90f.jpg" 
+        alt="Indian artisans at work"
+        class="about-img"
+    />
+</div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="mission-vision">
+        <div class="container">
+            <div class="mv-grid">
+                <div class="mv-card">
+                    <div class="mv-icon">🎯</div>
+                    <h3>Our Mission</h3>
+                    <p>To empower traditional Indian artisans by providing them with a global platform to showcase and sell their authentic handcrafted creations, ensuring fair compensation and sustainable livelihoods.</p>
+                </div>
+                <div class="mv-card">
+                    <div class="mv-icon">🔭</div>
+                    <h3>Our Vision</h3>
+                    <p>To become the world's leading marketplace for authentic Indian art and handicrafts, preserving cultural heritage while creating economic opportunities for artisan communities across India.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values -->
+    <section class="container">
+        <h2 class="section-title">Our Core Values</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">🤝</div>
+                <h3>Authenticity</h3>
+                <p>Every product on our platform is 100% handmade by verified artisans using traditional techniques passed down through generations.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">⚖️</div>
+                <h3>Fair Trade</h3>
+                <p>We ensure artisans receive fair compensation for their work, with transparent pricing and no exploitation of their craft.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🌱</div>
+                <h3>Sustainability</h3>
+                <p>We promote eco-friendly, sustainable crafts that use natural materials and traditional methods with minimal environmental impact.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🏛️</div>
+                <h3>Heritage Preservation</h3>
+                <p>By supporting artisans financially, we help keep ancient art forms alive for future generations to appreciate and learn.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🌍</div>
+                <h3>Community Impact</h3>
+                <p>We invest in artisan communities through skill development programs, education initiatives, and infrastructure support.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">💡</div>
+                <h3>Innovation</h3>
+                <p>While honoring tradition, we embrace modern technology to help artisans reach global markets and manage their businesses effectively.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Statistics -->
+    <section class="impact-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Our Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Active Artisans</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">28</div>
+                    <div class="stat-label">States Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50,000+</div>
+                    <div class="stat-label">Products Sold</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">45+</div>
+                    <div class="stat-label">Countries Reached</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Art Forms We Support -->
+    <section class="container">
+        <h2 class="section-title">Traditional Art Forms We Support</h2>
+        <div class="art-forms-grid">
+            <div class="art-form-card">
+                <div class="art-icon">🏺</div>
+                <h4>Pottery & Ceramics</h4>
+                <p>Blue Pottery, Terracotta, Longpi Pottery</p>
+            </div>
+            <div class="art-form-card">
+                <div class="art-icon">🎨</div>
+                <h4>Paintings</h4>
+                <p>Madhubani, Warli, Pattachitra, Kalamkari</p>
+            </div>
+            <div class="art-form-card">
+                <div class="art-icon">🧵</div>
+                <h4>Textiles</h4>
+                <p>Pashmina, Bandhani, Ikat, Khadi</p>
+            </div>
+            <div class="art-form-card">
+                <div class="art-icon">💍</div>
+                <h4>Jewelry</h4>
+                <p>Temple Jewelry, Kundan, Meenakari</p>
+            </div>
+            <div class="art-form-card">
+                <div class="art-icon">🪵</div>
+                <h4>Wood & Metal Craft</h4>
+                <p>Dhokra, Sandalwood Carving, Brass Work</p>
+            </div>
+            <div class="art-form-card">
+                <div class="art-icon">🧺</div>
+                <h4>Handicrafts</h4>
+                <p>Bamboo Craft, Cane Work, Papier-mâché</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <h2 class="section-title">Meet Our Team</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 3rem; color: var(--text-light);">
+                We're a passionate team dedicated to preserving India's artistic heritage and empowering artisan communities.
+            </p>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">👨‍💼</div>
+                    <h4>Rajesh Sharma</h4>
+                    <p class="team-role">Founder & CEO</p>
+                    <p class="team-bio">15+ years in e-commerce, passionate about social entrepreneurship</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👩‍💼</div>
+                    <h4>Priya Mehta</h4>
+                    <p class="team-role">Head of Artisan Relations</p>
+                    <p class="team-bio">Art historian working to preserve traditional crafts</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👨‍💻</div>
+                    <h4>Amit Patel</h4>
+                    <p class="team-role">Chief Technology Officer</p>
+                    <p class="team-bio">Building technology solutions for artisans</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👩‍🎨</div>
+                    <h4>Kavita Rao</h4>
+                    <p class="team-role">Curator & Quality Head</p>
+                    <p class="team-bio">Ensuring authenticity and excellence in every product</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Join Our Mission</h2>
+            <p>Whether you're an artisan looking to sell or a buyer seeking authentic art, we welcome you to the KalaSetu family</p>
+            <div class="cta-buttons">
+                <a href="sell.html" class="btn btn-primary">Become a Seller</a>
+                <a href="shop.html" class="btn btn-secondary">Shop Artworks</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>KalaSetu</h3>
+                <p>Celebrating India's artistic heritage, one creation at a time.</p>
+                <div class="social-icons">
+                    <span>📷</span>
+                    <span>👍</span>
+                    <span>🐦</span>
+                    <span>▶️</span>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="sell.html">Sell</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="shop.html">Pottery</a></li>
+                    <li><a href="shop.html">Paintings</a></li>
+                    <li><a href="shop.html">Textiles</a></li>
+                    <li><a href="shop.html">Jewelry</a></li>
+                    <li><a href="shop.html">Handicrafts</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📧 info@kalasetu.com</p>
+                <p>📞 +91 6393151972</p>
+                <p>📍 GHS, Dehmi Kalan, Jaipur, Rajasthan 303007</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 KalaSetu. All rights reserved. Preserving India's artistic legacy.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login / Signup</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label>I am a:</label>
+                    <select>
+                        <option>Buyer</option>
+                        <option>Seller</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2>Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: ₹0</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
