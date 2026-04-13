@@ -471,4 +471,4 @@ window.SupabaseAPI = {
     getSessionId
 };
 
-console.log('✅ Supabase backend connected successfully!');
+console.log('<i class="ph ph-check-circle"></i> Supabase backend connected successfully!');

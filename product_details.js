@@ -224,7 +224,7 @@ const productDetails = {
         price: 800,
         originalPrice: 1000,
         discount: 20,
-        icon: "🪔",
+        icon: "<i class="ph ph-lamp"></i>",
         image: "https://i.pinimg.com/736x/26/4b/a1/264ba11eadef88a9810349b024d5304a.jpg",
         images: [
             "https://i.pinimg.com/736x/26/4b/a1/264ba11eadef88a9810349b024d5304a.jpg",
@@ -569,7 +569,7 @@ function loadProductDetails(productId) {
 
     // Update product info
     document.getElementById('productName').textContent = product.name;
-    document.getElementById('productRegion').textContent = `📍 ${product.region}`;
+    document.getElementById('productRegion').textContent = `<i class="ph ph-map-pin"></i> ${product.region}`;
     document.getElementById('productCategory').textContent = product.category.charAt(0).toUpperCase() + product.category.slice(1);
     document.getElementById('productPrice').textContent = `₹${product.price.toLocaleString()}`;
     document.getElementById('originalPrice').textContent = `₹${product.originalPrice.toLocaleString()}`;
@@ -599,7 +599,7 @@ function loadProductDetails(productId) {
     // Update artisan info
     document.getElementById('artisanAvatar').textContent = product.artisan.avatar;
     document.getElementById('artisanName').textContent = product.artisan.name;
-    document.getElementById('artisanLocation').textContent = `📍 ${product.artisan.location}`;
+    document.getElementById('artisanLocation').textContent = `<i class="ph ph-map-pin"></i> ${product.artisan.location}`;
     document.getElementById('artisanExperience').textContent = `Experience: ${product.artisan.experience}`;
     document.getElementById('artisanProducts').textContent = `${product.artisan.products}+`;
     document.getElementById('artisanRating').textContent = product.artisan.rating;
@@ -645,7 +645,7 @@ function addToCartFromDetail() {
         addToCart(productId);
     }
     
-    showNotification(`✅ ${quantity} item(s) added to cart!`);
+    showNotification(`<i class="ph ph-check-circle"></i> ${quantity} item(s) added to cart!`);
 }
 
 // Buy now function
@@ -658,7 +658,7 @@ function buyNow() {
 function addToWishlist() {
     const productId = getProductIdFromURL();
     const product = productDetails[productId];
-    showNotification(`❤️ ${product.name} added to wishlist!`);
+    showNotification(`<i class="ph-fill ph-heart"></i> ${product.name} added to wishlist!`);
 }
 
 // View artisan profile
@@ -714,7 +714,7 @@ function loadSimilarProducts(currentProductId) {
             </div>
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <p class="product-region">📍 ${product.region}</p>
+                <p class="product-region"><i class="ph ph-map-pin"></i> ${product.region}</p>
                 <p class="product-price">₹${product.price.toLocaleString()}</p>
                 <div class="product-actions">
                     <button class="btn-small btn-cart" onclick="event.stopPropagation(); addToCart(${product.id})">Add to Cart</button>

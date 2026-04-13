@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 return;
             }
         } catch (err) {
-            console.warn('⚠️ Supabase unavailable, using local data:', err);
+            console.warn(' Supabase unavailable, using local data:', err);
         }
     }
 
@@ -173,10 +173,10 @@ async function addToCartFromDetail() {
         try {
             await window.SupabaseAPI.addCartItem(productId, quantity);
             if (typeof updateCartCount === 'function') await updateCartCount();
-            showNotification(`✅ ${quantity} item(s) added to cart!`);
+            showNotification(`<i class="ph ph-check-circle"></i> ${quantity} item(s) added to cart!`);
             return;
         } catch (err) {
-            console.warn('⚠️ Supabase add-to-cart failed, using local fallback:', err);
+            console.warn(' Supabase add-to-cart failed, using local fallback:', err);
         }
     }
 
@@ -195,7 +195,7 @@ async function addToCartFromDetail() {
 
         localStorage.setItem('kalasetu_cart', JSON.stringify(cart));
         if (typeof updateCartCount === 'function') await updateCartCount();
-        showNotification(`✅ ${quantity} item(s) added to cart!`);
+        showNotification(`<i class="ph ph-check-circle"></i> ${quantity} item(s) added to cart!`);
     }
 }
 
@@ -208,10 +208,10 @@ async function addToWishlist() {
         try {
             const isAdded = await window.SupabaseAPI.toggleWishlistItem(productId);
             if (typeof updateWishlistUI === 'function') updateWishlistUI();
-            showNotification(isAdded ? `❤️ ${product ? product.name : 'Product'} added to wishlist!` : `💔 Removed from wishlist!`);
+            showNotification(isAdded ? `<i class="ph-fill ph-heart"></i> ${product ? product.name : 'Product'} added to wishlist!` : `<i class="ph ph-heart-break"></i> Removed from wishlist!`);
             return;
         } catch (err) {
-            console.warn('⚠️ Supabase wishlist failed, using local fallback:', err);
+            console.warn(' Supabase wishlist failed, using local fallback:', err);
         }
     }
 
@@ -222,9 +222,9 @@ async function addToWishlist() {
     if (!wishlist.find(item => item.id === productId)) {
         wishlist.push(product);
         localStorage.setItem('kalasetu_wishlist', JSON.stringify(wishlist));
-        showNotification(`❤️ ${product.name} added to wishlist!`);
+        showNotification(`<i class="ph-fill ph-heart"></i> ${product.name} added to wishlist!`);
     } else {
-        showNotification(`💔 ${product.name} is already in your wishlist!`);
+        showNotification(`<i class="ph ph-heart-break"></i> ${product.name} is already in your wishlist!`);
     }
 }
 
@@ -286,7 +286,7 @@ function performSearchDetail() {
             <img src="${product.image}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
             <div style="flex: 1;">
                 <h4 style="margin-bottom: 0.25rem;">${product.name}</h4>
-                <p style="font-size: 0.85rem; color: #7f8c8d;">📍 ${product.region}</p>
+                <p style="font-size: 0.85rem; color: #7f8c8d;"><i class="ph ph-map-pin"></i> ${product.region}</p>
                 <p style="font-weight: 600; color: #D35400;">₹${product.price.toLocaleString()}</p>
             </div>
         `;
@@ -301,5 +301,5 @@ function handleLoginDetail(event) {
     const demoUser = { name: email.split('@')[0], email: email };
     localStorage.setItem('kalasetu_user', JSON.stringify(demoUser));
     closeModal('loginModal');
-    showNotification(`👋 Welcome, ${demoUser.name}!`);
+    showNotification(`<i class="ph ph-hand-waving"></i> Welcome, ${demoUser.name}!`);
 }

@@ -50,8 +50,7 @@ function getAllProducts() {
     if (useSupabase && supabaseProducts.length > 0) {
         return supabaseProducts;
     }
-    const defaultProducts = window.products || [];
-    return [...defaultProducts, ...userProducts];
+    return userProducts; // Strict backend requirement
 }
 
 // ============================================
@@ -61,15 +60,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Try to load products from Supabase
     if (hasSupabaseAPI()) {
         try {
-            console.log('🔄 Loading products from Supabase...');
+            console.log('Loading products from Supabase...');
             await Promise.all([
                 syncSupabaseProducts(),
                 syncSupabaseCart(),
                 syncSupabaseWishlist()
             ]);
-            console.log(`✅ Loaded ${supabaseProducts.length} products from Supabase`);
+            console.log(`Loaded ${supabaseProducts.length} products from Supabase`);
         } catch (err) {
-            console.warn('⚠️ Supabase unavailable, using local data:', err);
+            console.warn('Supabase unavailable, using local data:', err);
         }
     }
 
@@ -215,7 +214,7 @@ function performSearch() {
     if (results.length === 0) {
         searchResults.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: var(--text-light);">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">😔</div>
+                <div style="font-size: 3.5rem; margin-bottom: 1rem; color: var(--primary);"><i class="ph ph-smiley-sad"></i></div>
                 <p>No products found for "<strong>${query}</strong>"</p>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem;">Try searching for paintings, pottery, textiles, etc.</p>
             </div>
@@ -249,7 +248,7 @@ function performSearch() {
             <img src="${product.image}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
             <div style="flex: 1;">
                 <h4 style="margin-bottom: 0.25rem;">${product.name}</h4>
-                <p style="font-size: 0.85rem; color: var(--text-light);">📍 ${product.region} • ${product.category}</p>
+                <p style="font-size: 0.85rem; color: var(--text-light);"><i class="ph ph-map-pin"></i> ${product.region} • ${product.category}</p>
                 <p style="font-weight: 600; color: var(--primary);">₹${product.price.toLocaleString()}</p>
             </div>
         `;
@@ -296,12 +295,12 @@ async function handleUploadProduct(event) {
                 await syncSupabaseProducts();
                 document.getElementById('uploadProductForm').reset();
                 closeModal('sellModal');
-                showNotification('🎉 Your product has been listed successfully!');
+                showNotification('<i class="ph ph-check-circle" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Your product has been listed successfully!');
                 displayProducts(getAllProducts());
                 return;
             }
         } catch (err) {
-            console.warn('⚠️ Supabase upload failed, using local fallback:', err);
+            console.warn('Supabase upload failed, using local fallback:', err);
         }
     }
 
@@ -350,7 +349,7 @@ async function handleUploadProduct(event) {
 
     // Close modal and show success
     closeModal('sellModal');
-    showNotification('🎉 Your product has been listed successfully!');
+    showNotification('<i class="ph ph-check-circle" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Your product has been listed successfully!');
 
     // Refresh products display
     displayProducts(getAllProducts());
@@ -385,7 +384,7 @@ function handleLogin(event) {
         currentUser = user;
         localStorage.setItem('kalasetu_user', JSON.stringify(user));
         closeModal('loginModal');
-        showNotification(`👋 Welcome back, ${user.name}!`);
+        showNotification(`<i class="ph ph-hand-waving" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Welcome back, ${user.name}!`);
         updateUserUI();
     } else {
         // For MVP demo, create a quick session if user doesn't exist
@@ -393,7 +392,7 @@ function handleLogin(event) {
         currentUser = demoUser;
         localStorage.setItem('kalasetu_user', JSON.stringify(demoUser));
         closeModal('loginModal');
-        showNotification(`👋 Welcome, ${demoUser.name}!`);
+        showNotification(`<i class="ph ph-hand-waving" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Welcome, ${demoUser.name}!`);
         updateUserUI();
     }
 }
@@ -419,7 +418,7 @@ function handleSignup(event) {
     localStorage.setItem('kalasetu_user', JSON.stringify(newUser));
 
     closeModal('loginModal');
-    showNotification(`🎉 Welcome to KalaSetu, ${name}!`);
+    showNotification(`<i class="ph ph-party-popper" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Welcome to KalaSetu, ${name}!`);
     updateUserUI();
 }
 
@@ -433,7 +432,7 @@ function updateUserUI() {
 function logout() {
     currentUser = null;
     localStorage.removeItem('kalasetu_user');
-    showNotification('👋 You have been logged out.');
+    showNotification('<i class="ph ph-sign-out" style="color: var(--text-light); margin-right: 8px; font-size: 1.2rem;"></i> You have been logged out.');
     updateUserUI();
 }
 
@@ -453,7 +452,7 @@ async function addToCart(productId) {
             await window.SupabaseAPI.addCartItem(productId, 1);
             await syncSupabaseCart();
             await updateCartCount();
-            showNotification('✅ Added to cart!');
+            showNotification('<i class="ph ph-shopping-cart" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Added to cart!');
 
             const cartModal = document.getElementById('cartModal');
             if (cartModal && cartModal.style.display === 'flex') {
@@ -461,7 +460,7 @@ async function addToCart(productId) {
             }
             return;
         } catch (err) {
-            console.warn('⚠️ Supabase cart add failed, using local fallback:', err);
+            console.warn('Supabase cart add failed, using local fallback:', err);
         }
     }
 
@@ -478,7 +477,7 @@ async function addToCart(productId) {
         syncLocalCache();
 
         await updateCartCount();
-        showNotification('✅ Added to cart!');
+        showNotification('<i class="ph ph-shopping-cart" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Added to cart!');
 
         const cartModal = document.getElementById('cartModal');
         if (cartModal && cartModal.style.display === 'flex') {
@@ -494,7 +493,7 @@ async function updateCartCount() {
             try {
                 await syncSupabaseCart();
             } catch (err) {
-                console.warn('⚠️ Cart sync failed:', err);
+                console.warn('Cart sync failed:', err);
             }
         }
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -559,20 +558,23 @@ window.onclick = function (event) {
 
 function showNotification(message) {
     const notification = document.createElement('div');
-    notification.textContent = message;
+    notification.innerHTML = `<div style="display: flex; align-items: center;">${message}</div>`;
     notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        background: linear-gradient(135deg, #2C3E50, #34495E);
-        color: white;
-        padding: 1rem 2rem;
+        background: var(--bg-glass);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 1rem 1.5rem;
         border-radius: 12px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        box-shadow: var(--shadow-lg);
         z-index: 3000;
         font-weight: 500;
         font-size: 1rem;
-        animation: slideIn 0.3s ease;
+        animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     `;
 
     // Add animation keyframes
@@ -611,14 +613,14 @@ async function displayCartItems() {
         try {
             await syncSupabaseCart();
         } catch (err) {
-            console.warn('⚠️ Cart refresh failed:', err);
+            console.warn('Cart refresh failed:', err);
         }
     }
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
             <div style="text-align:center; padding:3rem; color: var(--text-light)">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
+                <div style="font-size: 4rem; margin-bottom: 1rem; color: var(--primary);"><i class="ph ph-shopping-cart"></i></div>
                 <h3>Your cart is empty</h3>
                 <p>Add some beautiful artworks to get started!</p>
             </div>
@@ -642,7 +644,7 @@ async function displayCartItems() {
             <img src="${item.image}" alt="${item.name}" style="width:70px; height:70px; object-fit:cover; border-radius:8px;">
             <div style="flex:1">
                 <h4 style="margin-bottom:0.25rem; font-size: 1rem;">${item.name}</h4>
-                <p style="font-size:0.85rem; color: var(--text-light);">📍 ${item.region}</p>
+                <p style="font-size:0.85rem; color: var(--text-light);"><i class="ph ph-map-pin"></i> ${item.region}</p>
                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
                     <button onclick="updateCartQuantity(${item.id}, -1)" style="border:none; background:#f0f0f0; width:25px; height:25px; border-radius:5px; cursor:pointer;">-</button>
                     <span style="font-weight: 600;">${item.quantity}</span>
@@ -673,7 +675,7 @@ async function updateCartQuantity(productId, change) {
                     await window.SupabaseAPI.updateCartItemQuantity(item.cartItemId, newQuantity);
                     await syncSupabaseCart();
                 } catch (err) {
-                    console.warn('⚠️ Supabase cart update failed, using local fallback:', err);
+                    console.warn(' Supabase cart update failed, using local fallback:', err);
                     item.quantity = newQuantity;
                     syncLocalCache();
                 }
@@ -697,7 +699,7 @@ async function removeFromCart(productId) {
                 await window.SupabaseAPI.removeCartItem(item.cartItemId);
                 await syncSupabaseCart();
             } catch (err) {
-                console.warn('⚠️ Supabase cart remove failed, using local fallback:', err);
+                console.warn('Supabase cart remove failed, using local fallback:', err);
                 cart.splice(index, 1);
                 syncLocalCache();
             }
@@ -708,13 +710,13 @@ async function removeFromCart(productId) {
 
         await displayCartItems();
         await updateCartCount();
-        showNotification('🗑️ Item removed from cart');
+        showNotification('<i class="ph ph-trash" style="color: #e74c3c; margin-right: 8px; font-size: 1.2rem;"></i> Item removed from cart');
     }
 }
 
 async function checkout() {
     if (cart.length === 0) {
-        showNotification('❌ Your cart is empty!');
+        showNotification('<i class="ph ph-warning" style="color: #e74c3c; margin-right: 8px; font-size: 1.2rem;"></i> Your cart is empty!');
         return;
     }
 
@@ -722,16 +724,16 @@ async function checkout() {
     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     // Show checkout confirmation
-    const confirmed = confirm(`🎉 Order Summary\n\nItems: ${itemCount}\nTotal: ₹${total.toLocaleString()}\n\nProceed with payment?`);
+    const confirmed = confirm(`Order Summary\n\nItems: ${itemCount}\nTotal: ₹${total.toLocaleString()}\n\nProceed with payment?`);
 
     if (confirmed) {
-        showNotification('🎉 Order placed successfully! Thank you for supporting Indian artisans!');
+        showNotification('<i class="ph ph-check-circle" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Order placed successfully! Thank you for supporting Indian artisans!');
         if (hasSupabaseAPI()) {
             try {
                 await window.SupabaseAPI.clearCart();
                 await syncSupabaseCart();
             } catch (err) {
-                console.warn('⚠️ Supabase clear cart failed, using local fallback:', err);
+                console.warn('Supabase clear cart failed, using local fallback:', err);
                 cart = [];
                 localStorage.removeItem('kalasetu_cart');
             }
@@ -760,17 +762,17 @@ async function addToWishlist(productId) {
         try {
             const isAdded = await window.SupabaseAPI.toggleWishlistItem(productId);
             await syncSupabaseWishlist();
-            showNotification(isAdded ? '❤️ Added to wishlist' : '💔 Removed from wishlist');
+            showNotification(isAdded ? '<i class="ph-fill ph-heart" style="color: #e74c3c; margin-right: 8px; font-size: 1.2rem;"></i> Added to wishlist' : '<i class="ph ph-heart-break" style="color: var(--text-light); margin-right: 8px; font-size: 1.2rem;"></i> Removed from wishlist');
         } catch (err) {
-            console.warn('⚠️ Supabase wishlist toggle failed, using local fallback:', err);
+            console.warn('Supabase wishlist toggle failed, using local fallback:', err);
             if (!product) return;
             const index = wishlist.findIndex(item => item.id === productId);
             if (index === -1) {
                 wishlist.push(product);
-                showNotification('❤️ Added to wishlist');
+                showNotification('<i class="ph-fill ph-heart" style="color: #e74c3c; margin-right: 8px; font-size: 1.2rem;"></i> Added to wishlist');
             } else {
                 wishlist.splice(index, 1);
-                showNotification('💔 Removed from wishlist');
+                showNotification('<i class="ph ph-heart-break" style="color: var(--text-light); margin-right: 8px; font-size: 1.2rem;"></i> Removed from wishlist');
             }
             syncLocalCache();
         }
@@ -779,10 +781,10 @@ async function addToWishlist(productId) {
         const index = wishlist.findIndex(item => item.id === productId);
         if (index === -1) {
             wishlist.push(product);
-            showNotification('❤️ Added to wishlist');
+            showNotification('<i class="ph-fill ph-heart" style="color: #e74c3c; margin-right: 8px; font-size: 1.2rem;"></i> Added to wishlist');
         } else {
             wishlist.splice(index, 1);
-            showNotification('💔 Removed from wishlist');
+            showNotification('<i class="ph ph-heart-break" style="color: var(--text-light); margin-right: 8px; font-size: 1.2rem;"></i> Removed from wishlist');
         }
         syncLocalCache();
     }
@@ -817,7 +819,7 @@ async function displayWishlistItems() {
         try {
             await syncSupabaseWishlist();
         } catch (err) {
-            console.warn('⚠️ Wishlist refresh failed:', err);
+            console.warn(' Wishlist refresh failed:', err);
         }
     }
 
@@ -866,7 +868,7 @@ async function removeFromWishlist(productId) {
                 await window.SupabaseAPI.removeWishlistItem(productId);
                 await syncSupabaseWishlist();
             } catch (err) {
-                console.warn('⚠️ Supabase wishlist remove failed, using local fallback:', err);
+                console.warn(' Supabase wishlist remove failed, using local fallback:', err);
                 wishlist.splice(index, 1);
                 syncLocalCache();
             }
@@ -883,7 +885,7 @@ async function removeFromWishlist(productId) {
 
 async function addAllWishlistToCart() {
     if (wishlist.length === 0) {
-        showNotification('Your wishlist is empty!');
+        showNotification('<i class="ph ph-info" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Your wishlist is empty!');
         return;
     }
 
@@ -894,7 +896,7 @@ async function addAllWishlistToCart() {
             }
             await syncSupabaseCart();
         } catch (err) {
-            console.warn('⚠️ Supabase bulk add failed, using local fallback:', err);
+            console.warn('Supabase bulk add failed, using local fallback:', err);
             wishlist.forEach(item => {
                 const inCart = cart.find(c => c.id === item.id);
                 if (!inCart) {
@@ -918,7 +920,7 @@ async function addAllWishlistToCart() {
     }
 
     await updateCartCount();
-    showNotification(`✅ Added ${wishlist.length} item(s) to cart!`);
+    showNotification(`<i class="ph ph-shopping-cart" style="color: var(--accent); margin-right: 8px; font-size: 1.2rem;"></i> Added ${wishlist.length} item(s) to cart!`);
 
     // Optional: Clear wishlist after moving? The user request didn't specify, but usually you keep them or ask. 
     // I'll keep them in wishlist for now as "saved items".
